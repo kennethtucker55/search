@@ -1,0 +1,60 @@
+<?php
+$_PLUGIN_CONFIG['DATA'] = array(
+	'author'=>'Kenneth Tucker',
+	'version'=>'1.0',
+	'url'=>'http://kennethtucker.com'
+);
+
+class PLUGIN_SEARCH extends Plugin
+{
+
+	function __construct()
+	{
+		parent::__construct();
+	}
+	public function blog_body()
+	{
+		global $_DB_POST;
+
+		$html  = '<form action="index.php" method="get">';
+
+		if (!empty($_GET["search"])) {
+				$list = $_DB_POST->get_list_by_page( array('page'=>0, 'amount'=>$_DB_POST->get_count() ));
+				$html .= '<input type="text" name="search" value="'.$_GET["search"].'">';
+				$html .= '<input type="submit"  value="submit"/>';
+				$html .= '</form>';
+    			$html .= '<ul>';
+
+				foreach($list as $post)
+				{
+					$title = empty($post['title'])? ucfirst($post['type']) : $post['title'];
+					// Search for string
+					if($this->search(array('search'=>$_GET["search"], 'content'=>$post['content'], 'title'=>$title)) ) {
+						// Permalink
+						$post['permalink'] = Url::post($post);
+						// Build list of nibbleblog-v4.0.5 page links 
+						// include search arg state in $_GET["search"]
+						$html .= '<li><a href="'.$post['permalink'].'&search='.$_GET["search"].'">'.$title.'</a></li>';
+					}
+				}
+				$html .= '</ul>';
+  		} else {
+  				$html .= '<input type="text" name="search" value="">';
+  				$html .= '<input type="submit"  value="submit"/>';
+				$html .= '</form>';
+
+  		}
+		return $html;
+	}
+	private function search($arg)
+	{
+		if (strlen(strstr($arg['content'][0],$arg['search']))>0) {
+			return true;
+		}
+		if (strlen(strstr($arg['title'],$arg['search']))>0) {
+			return true;
+		}
+		return (false);
+	}
+}
+?>

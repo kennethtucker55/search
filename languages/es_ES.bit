@@ -1,0 +1,8 @@
+<?php
+
+$_PLUGIN_CONFIG['LANG'] = array(
+	'NAME'=>'Buscar',
+	'DESCRIPTION'=>'Buscar Nibbleblog para cuerdas.'
+);
+
+?>

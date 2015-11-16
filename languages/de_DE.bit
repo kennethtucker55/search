@@ -1,0 +1,8 @@
+<?php
+
+$_PLUGIN_CONFIG['LANG'] = array(
+'NAME'=>'Suchen',
+'DESCRIPTION'=>'Suchen nibbleblog für Streich.'
+);
+
+?>
